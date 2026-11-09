@@ -145,19 +145,14 @@ const IosProfile = {
 		},
 		// NOTE: hevc should also be a supported VideoCodec, but the server is failing to properly handle
 		// VideoCodecTag conditions for progressive transcodes.
-		// NOTE: Video transcoding profiles with a static context value seem ignored?
+		// NOTE: Progressive mp4 video transcodes are only intended for downloads. They must not use the
+		// streaming context here, since the server prefers them over HLS whenever they can copy the source
+		// audio (e.g. ac3/eac3) and AVPlayer fails to stream the resulting fragmented mp4 (error -11850).
+		// toDownloadProfile() adds the streaming context version needed for downloads.
 		{
 			AudioCodec: 'aac,mp3,ac3,eac3,flac,alac',
 			Container: 'mp4',
 			Context: EncodingContext.Static,
-			Protocol: MediaStreamProtocol.Http,
-			Type: DlnaProfileType.Video,
-			VideoCodec: 'h264'
-		},
-		{
-			AudioCodec: 'aac,mp3,ac3,eac3,flac,alac',
-			Container: 'mp4',
-			Context: EncodingContext.Streaming,
 			Protocol: MediaStreamProtocol.Http,
 			Type: DlnaProfileType.Video,
 			VideoCodec: 'h264'
